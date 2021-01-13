@@ -41,5 +41,5 @@ octave-workspace
 
 
 # my own
-machine-learning-ex1/ex1/token.mat
-machine-learning-ex1/ex1/lib
+machine-learning-ex[0-20]/ex[0-20]/token.mat
+machine-learning-ex[0-20]/ex[0-20]/lib

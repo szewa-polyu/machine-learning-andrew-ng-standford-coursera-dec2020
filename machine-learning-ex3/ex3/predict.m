@@ -21,20 +21,19 @@ p = zeros(size(X, 1), 1);
 %       can use max(A, [], 2) to obtain the max for each row.
 %
 
-% Add ones to the X data matrix; each row is one record
-X = [ones(m, 1) X];
+Thetas = { Theta1, Theta2 };
+a = X';
 
-% Compute hidden layer a2; each column are activations for one record
-a2 = sigmoid(Theta1 * X');
+for i = 1 : numel(Thetas)
+  % Add ones to activation units of the ith layer; each column are activations for one record
+  a = [ones(1, size(a, 2)); a];
+  
+  % Compute hidden layer (i+1)th layer; 
+  a = sigmoid(Thetas{i} * a);
+end
 
-% Add ones to the a2 units
-a2 = [ones(1, m); a2];
-
-% Computer output layer a3; each column are outputs for one record
-a3 = sigmoid(Theta2 * a2);
-
-% Get maxIdx corresponding to max output from each column of a3
-[_, maxIdx] = max(a3);
+% Get maxIdx corresponding to max output from each column of output activation
+[_, maxIdx] = max(a);
 
 % p is column vector of length m
 p = maxIdx';

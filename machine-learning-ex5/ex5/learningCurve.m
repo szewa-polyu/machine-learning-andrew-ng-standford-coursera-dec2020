@@ -61,7 +61,7 @@ for i = 1:m
   myX = X(1:i, :);
   myY = y(1:i);
 
-  trainedTheta = trainLinearReg(myX, myY, lambda);
+  [trainedTheta] = trainLinearReg(myX, myY, lambda);
 
   error_train(i) = linearRegCostFunction(myX, myY, trainedTheta, 0);
   error_val(i) = linearRegCostFunction(Xval, yval, trainedTheta, 0);

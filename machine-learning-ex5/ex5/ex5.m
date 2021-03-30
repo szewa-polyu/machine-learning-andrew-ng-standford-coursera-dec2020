@@ -156,7 +156,6 @@ fprintf('\nProgram paused. Press enter to continue.\n');
 pause;
 
 
-
 %% =========== Part 7: Learning Curve for Polynomial Regression =============
 %  Now, you will get to experiment with polynomial regression with multiple
 %  values of lambda. The code below runs polynomial regression with 
@@ -214,6 +213,69 @@ fprintf('lambda\t\tTrain Error\tValidation Error\n');
 for i = 1:length(lambda_vec)
 	fprintf(' %f\t%f\t%f\n', ...
             lambda_vec(i), error_train(i), error_val(i));
+end
+
+fprintf('Program paused. Press enter to continue.\n');
+pause;
+
+
+%% =========== Part 9: Computing Test Set Error =============
+
+lambda = 3;
+[theta] = trainLinearReg(X_poly, y, lambda);
+J_test = linearRegCostFunction(X_poly_test, ytest, theta, 0)(1);
+
+fprintf(['Test Set Error at lambda = 3: %f '...
+         '\n(this value should be about 3.8599)\n'], J_test);
+
+fprintf('Program paused. Press enter to continue.\n');
+pause;
+
+
+%% =========== Part 10: Plotting Learning Curves with Randomly Selected Examples =============
+
+lambda = 3;
+numOfTimesPerNumOfTrainRecords = 10;
+
+m = size(y, 1);
+error_train = zeros(m, 1);
+error_val   = zeros(m, 1);
+
+for i = 1:numOfTimesPerNumOfTrainRecords
+  % https://stackoverflow.com/questions/46925290/random-shuffle-matlab
+  ind = (randperm(m))';
+  X_poly_rand = X_poly(ind);
+  y_rand = y(ind);
+
+  [error_train_i, error_val_i] = ...
+    learningCurve(X_poly_rand, y_rand, X_poly_val, yval, lambda);
+  error_train += error_train_i;
+  error_val += error_val_i;
+
+  % fprintf('i = %f', i);
+  % fprintf('error_train_i = %f', error_train_i);
+  % fprintf('error_val_i = %f', error_val_i);
+  i
+  error_train_i
+  error_val_i
+end
+
+error_train /= numOfTimesPerNumOfTrainRecords;
+error_val /= numOfTimesPerNumOfTrainRecords;
+
+figure(1);
+plot(1:m, error_train, 1:m, error_val);
+
+title(sprintf('Polynomial Regression Learning Curve (lambda = %f)', lambda));
+xlabel('Number of training examples');
+ylabel('Error');
+axis([0 13 0 100]);
+legend('Train', 'Cross Validation');
+
+fprintf('Polynomial Regression (lambda = %f)\n\n', lambda);
+fprintf('# Training Examples\tTrain Error\tCross Validation Error\n');
+for i = 1:m
+    fprintf('  \t%d\t\t%f\t%f\n', i, error_train(i), error_val(i));
 end
 
 fprintf('Program paused. Press enter to continue.\n');

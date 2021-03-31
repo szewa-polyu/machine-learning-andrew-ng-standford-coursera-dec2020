@@ -235,7 +235,7 @@ pause;
 %% =========== Part 10: Plotting Learning Curves with Randomly Selected Examples =============
 
 lambda = 3;
-numOfTimesPerNumOfTrainRecords = 10;
+numOfTimesPerNumOfTrainRecords = 50;
 
 m = size(y, 1);
 error_train = zeros(m, 1);
@@ -243,21 +243,14 @@ error_val   = zeros(m, 1);
 
 for i = 1:numOfTimesPerNumOfTrainRecords
   % https://stackoverflow.com/questions/46925290/random-shuffle-matlab
-  ind = (randperm(m))';
-  X_poly_rand = X_poly(ind);
+  ind = randperm(m);
+  X_poly_rand = X_poly(ind, :);
   y_rand = y(ind);
 
   [error_train_i, error_val_i] = ...
     learningCurve(X_poly_rand, y_rand, X_poly_val, yval, lambda);
   error_train += error_train_i;
   error_val += error_val_i;
-
-  % fprintf('i = %f', i);
-  % fprintf('error_train_i = %f', error_train_i);
-  % fprintf('error_val_i = %f', error_val_i);
-  i
-  error_train_i
-  error_val_i
 end
 
 error_train /= numOfTimesPerNumOfTrainRecords;
@@ -275,7 +268,7 @@ legend('Train', 'Cross Validation');
 fprintf('Polynomial Regression (lambda = %f)\n\n', lambda);
 fprintf('# Training Examples\tTrain Error\tCross Validation Error\n');
 for i = 1:m
-    fprintf('  \t%d\t\t%f\t%f\n', i, error_train(i), error_val(i));
+  fprintf('  \t%d\t\t%f\t%f\n', i, error_train(i), error_val(i));
 end
 
 fprintf('Program paused. Press enter to continue.\n');

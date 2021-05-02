@@ -23,11 +23,50 @@ sigma = 0.3;
 %        mean(double(predictions ~= yval))
 %
 
+Cs = [0.01; 0.03; 0.1; 0.3; 1; 3; 10; 30];
+sigmas = [0.01; 0.03; 0.1; 0.3; 1; 3; 10; 30];
 
+sizeOfCs = size(Cs, 1);
+sizeOfSigmas = size(sigmas, 1);
 
+errors = zeros(sizeOfSigmas);
 
+i = 1;
+minError = 1;
+minErrorIdx = 1;
+for j = [1:sizeOfCs]
+  C_try = Cs(j);
+  for k = [1:sizeOfSigmas]
+    sigma_try = sigmas(k);
+    model_try = svmTrain(X, y, C_try, @(x1, x2) gaussianKernel(x1, x2, sigma_try)); 
+    predictions_try = svmPredict(model_try, Xval);
+    error = mean(double(predictions_try ~= yval));
 
+    if (error < minError)
+      minError = error;
+      minErrorIdx = i;
+    end
 
+    i
+    error
+
+    errors(i) = error;
+    i++;
+  end
+end
+
+bestCIdx = idivide(minErrorIdx, int32(sizeOfCs), 'ceil');
+bestSigmaIdx = mod(minErrorIdx, sizeOfSigmas);
+if (bestSigmaIdx == 0)
+  bestSigmaIdx = sizeOfSigmas
+end
+
+minErrorIdx
+bestCIdx
+bestSigmaIdx
+
+C = Cs(bestCIdx);
+sigma = sigmas(bestSigmaIdx);
 
 % =========================================================================
 

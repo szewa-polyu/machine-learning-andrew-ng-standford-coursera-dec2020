@@ -16,10 +16,9 @@ sim = 0;
 %
 %
 
-
-
-
-
+diff = x1 - x2;
+length_sq = diff .* diff;
+sim = exp(- sum(length_sq) / (2 * sigma * sigma));
 
 % =============================================================
     

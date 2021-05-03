@@ -34,6 +34,8 @@ errors = zeros(sizeOfSigmas);
 i = 1;
 minError = 1;
 minErrorIdx = 1;
+bestC = Cs(1);
+bestSigma = sigmas(1);
 for j = [1:sizeOfCs]
   C_try = Cs(j);
   for k = [1:sizeOfSigmas]
@@ -45,9 +47,13 @@ for j = [1:sizeOfCs]
     if (error < minError)
       minError = error;
       minErrorIdx = i;
+      bestC = C_try;
+      bestSigma = sigma_try;
     end
 
     i
+    C_try
+    sigma_try
     error
 
     errors(i) = error;
@@ -55,18 +61,8 @@ for j = [1:sizeOfCs]
   end
 end
 
-bestCIdx = idivide(minErrorIdx, int32(sizeOfCs), 'ceil');
-bestSigmaIdx = mod(minErrorIdx, sizeOfSigmas);
-if (bestSigmaIdx == 0)
-  bestSigmaIdx = sizeOfSigmas
-end
-
-minErrorIdx
-bestCIdx
-bestSigmaIdx
-
-C = Cs(bestCIdx);
-sigma = sigmas(bestSigmaIdx);
+C = bestC;
+sigma = bestSigma;
 
 % =========================================================================
 
